@@ -1,20 +1,22 @@
-# Sequelize BelongsToMany
+# Hashing Password with Bcrypt
 
-`belongsToMany()` is the special method for define many-to-many association. This method means that many data in model (the source) has relation to many data in another model (the target).  
+In this digital era, there is a chance data from application can be stolen and crack. For that reason, every software engineers secure app by hashing user password before store it to database. Hashing password now is very easy, there are many hashing algorithm and the common is bcrypt. 
 
-
-For example in our database, many data product has relation to many data category in association. To apply this, we need "bridge" table to store foreignKey, in this case productCategory. So, we can define the association in product model as follows:  
-
+Bcrypt allows building a password security platform that can evolve alongside hardware technology to guard against the threats that the future may bring, such as attackers having the computing power to crack passwords twice as fast.
+ 
+For a simple example:
 ```javascript
-product.belongsToMany(models.category, {
-  as: "categories",
-  // through is required in this association
-  through: {
-    model: "productCategory", // this is "bridge" table
-    as: "bridge",
-  },
-  foreignKey: "idProduct",
+  const bcrypt = require("bcrypt");
+  
+  // we generate salt (random value) with 10 rounds
+  const salt = await bcrypt.genSalt(10);
+  
+  // we hash password from client with salt
+  const hashedPassword = await bcrypt.hash(req.body.password, salt);
+  
+  // compare password between original password from client and hashed password from database
+  const isMatching = await bcrypt.compare(req.body.password, userExist.password);
 });
 ```
 
-Reference: [Sequelize belongsToMany](https://sequelize.org/master/class/lib/associations/belongs-to-many.js~BelongsToMany.html)
+Reference: [Bcrypt](https://www.npmjs.com/package/bcrypt)
