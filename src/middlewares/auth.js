@@ -1,13 +1,10 @@
 const jwt = require("jsonwebtoken");
 
 exports.auth = (req, res, next) => {
-  let header, token;
-  
+  const authHeader = req.header("Authorization")
+  const token = authHeader && authHeader.split(' ')[1]
   // check if user send token via Authorization header or not
-  if ( 
-    !(header = req.header("Authorization")) || 
-    !(token = header.replace("Bearer ", ""))
-  ) {
+  if (!token) {
     // rejected request and send response access denied
     return res.status(401).send({ message: "Access denied!" });
   }
