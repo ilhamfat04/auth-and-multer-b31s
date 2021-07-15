@@ -80,8 +80,11 @@ exports.login = async (req, res) => {
         exclude: ["createdAt", "updatedAt"],
       },
     });
+    // compare password between entered from client and from database
+    const isValid = await bcrypt.compare(req.body.password, userExist.password);
 
-    if (userExist.password !== req.body.password) {
+    // check if not valid then return response with status 400 (bad request)
+    if (!isValid) {
       return res.status(400).send({
         status: "failed",
         message: "credential is invalid",
