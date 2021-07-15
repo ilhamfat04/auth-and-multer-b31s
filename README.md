@@ -1,20 +1,29 @@
-# Sequelize BelongsToMany
+# Inpu Validation with Joi
 
-`belongsToMany()` is the special method for define many-to-many association. This method means that many data in model (the source) has relation to many data in another model (the target).  
+For some security reason, we need to validate input data that comes from client (login or fill form) in our backend. Validation is very important to prevent user make request that doesn’t meet criteria.
 
-
-For example in our database, many data product has relation to many data category in association. To apply this, we need "bridge" table to store foreignKey, in this case productCategory. So, we can define the association in product model as follows:  
-
+For a simple example
 ```javascript
-product.belongsToMany(models.category, {
-  as: "categories",
-  // through is required in this association
-  through: {
-    model: "productCategory", // this is "bridge" table
-    as: "bridge",
-  },
-  foreignKey: "idProduct",
+const Joi = require("joi");
+
+const schema = Joi.object({
+  name: Joi.string().min(5).required(),
+  email: Joi.string().email().min(6).required(),
+  password: Joi.string().min(6).required(),
 });
+ 
+// do validation and get error object from schema.validate
+const { error } = schema.validate(req.body);
+
+// if error exist send validation error message
+if (error)
+  return res.status(400).send({
+    error: {
+      message: error.details[0].message,
+    },
+  }); 
+}
+
 ```
 
-Reference: [Sequelize belongsToMany](https://sequelize.org/master/class/lib/associations/belongs-to-many.js~BelongsToMany.html)
+Reference: [Input validation with Joi](https://joi.dev/api/?v=17.4.1#introduction)
