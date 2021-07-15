@@ -3,8 +3,8 @@ const { user } = require("../../models");
 
 // import joi validation
 const Joi = require("joi");
-// import bcrypt
-const bcrypt = require("bcrypt");
+
+// import package here
 
 exports.register = async (req, res) => {
   // our validation schema here
@@ -26,10 +26,7 @@ exports.register = async (req, res) => {
     });
 
   try {
-    // we generate salt (random value) with 10 rounds
-    const salt = await bcrypt.genSalt(10);
-    // we hash password from request with salt
-    const hashedPassword = await bcrypt.hash(req.body.password, salt);
+    // code here
 
     const newUser = await user.create({
       name: req.body.name,
@@ -80,21 +77,13 @@ exports.login = async (req, res) => {
         exclude: ["createdAt", "updatedAt"],
       },
     });
-    // compare password between entered from client and from database
-    const isValid = await bcrypt.compare(req.body.password, userExist.password);
+    // code here
 
-    // check if not valid then return response with status 400 (bad request)
-    if (!isValid) {
-      return res.status(400).send({
-        status: "failed",
-        message: "credential is invalid",
-      });
-    }
     res.status(200).send({
       status: "success...",
       data: {
         name: userExist.name,
-        email: userExist.email
+        email: userExist.email,
       },
     });
   } catch (error) {
