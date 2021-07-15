@@ -5,8 +5,8 @@ const { user } = require("../../models");
 const Joi = require("joi");
 // import bcrypt
 const bcrypt = require("bcrypt");
-//import jsonwebtoken
-const jwt = require("jsonwebtoken");
+
+// import package here
 
 exports.register = async (req, res) => {
   // our validation schema here
@@ -39,15 +39,14 @@ exports.register = async (req, res) => {
       password: hashedPassword,
     });
 
-    // generate token
-    const token = jwt.sign({ id: user.id }, process.env.TOKEN_KEY);
-    
+    // code here
+
     res.status(200).send({
       status: "success...",
       data: {
         name: newUser.name,
         email: newUser.email,
-        token
+        // code here
       },
     });
   } catch (error) {
@@ -97,15 +96,14 @@ exports.login = async (req, res) => {
       });
     }
 
-    // generate token
-    const token = jwt.sign({ id: userExist.id }, process.env.TOKEN_KEY);
+    // code here
 
     res.status(200).send({
       status: "success...",
       data: {
         name: userExist.name,
         email: userExist.email,
-        token
+        // code here
       },
     });
   } catch (error) {

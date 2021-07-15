@@ -9,7 +9,7 @@ const { getTransactions, addTransaction } = require('../controllers/transaction'
 const { register, login } = require('../controllers/auth')
 
 // Middleware
-const { auth } = require('../middlewares/auth')
+// import middleware here
 
 // Route
 router.post('/user', addUsers)
@@ -19,10 +19,10 @@ router.patch('/user/:id', updateUser)
 router.delete('/user/:id', deleteUser)
 
 router.get('/products', getProduct)
-router.post('/product', auth, addProduct)
+router.post('/product', addProduct) // place middleware before controller
 
 router.get('/transactions', getTransactions)
-router.post('/transaction', auth, addTransaction)
+router.post('/transaction', addTransaction) // place middleware before controller
 
 router.post('/register', register)
 router.post('/login', login)
