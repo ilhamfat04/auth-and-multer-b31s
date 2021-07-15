@@ -3,6 +3,8 @@ const { user } = require("../../models");
 
 // import joi validation
 const Joi = require("joi");
+// import bcrypt
+const bcrypt = require("bcrypt");
 
 exports.register = async (req, res) => {
   // our validation schema here
@@ -24,17 +26,22 @@ exports.register = async (req, res) => {
     });
 
   try {
-    const user = await user.create({
+    // we generate salt (random value) with 10 rounds
+    const salt = await bcrypt.genSalt(10);
+    // we hash password from request with salt
+    const hashedPassword = await bcrypt.hash(req.body.password, salt);
+
+    const newUser = await user.create({
       name: req.body.name,
       email: req.body.email,
-      password: req.body.password,
+      password: hashedPassword,
     });
 
     res.status(200).send({
       status: "success...",
       data: {
-        name: user.name,
-        email: user.email,
+        name: newUser.name,
+        email: newUser.email,
       },
     });
   } catch (error) {
