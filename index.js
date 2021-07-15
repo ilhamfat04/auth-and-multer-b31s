@@ -1,3 +1,5 @@
+// import dotenv and call config function to load environment
+require('dotenv').config()
 const express = require('express')
 
 // Get routes to the variabel

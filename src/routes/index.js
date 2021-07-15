@@ -8,6 +8,9 @@ const { getProduct, addProduct } = require('../controllers/product')
 const { getTransactions, addTransaction } = require('../controllers/transaction')
 const { register, login } = require('../controllers/auth')
 
+// Middleware
+const { auth } = require('../middlewares/auth')
+
 // Route
 router.post('/user', addUsers)
 router.get('/users', getUsers)
@@ -16,10 +19,10 @@ router.patch('/user/:id', updateUser)
 router.delete('/user/:id', deleteUser)
 
 router.get('/products', getProduct)
-router.post('/product', addProduct)
+router.post('/product', auth, addProduct)
 
 router.get('/transactions', getTransactions)
-router.post('/transaction', addTransaction)
+router.post('/transaction', auth, addTransaction)
 
 router.post('/register', register)
 router.post('/login', login)
