@@ -10,6 +10,7 @@ const { register, login } = require('../controllers/auth')
 
 // Middleware
 const { auth } = require('../middlewares/auth')
+const { uploadFile } = require('../middlewares/uploadFile')
 
 // Route
 router.post('/user', addUsers)
@@ -19,7 +20,7 @@ router.patch('/user/:id', updateUser)
 router.delete('/user/:id', deleteUser)
 
 router.get('/products', getProduct)
-router.post('/product', auth, addProduct)
+router.post('/product', auth, uploadFile("image"), addProduct)
 
 router.get('/transactions', getTransactions)
 router.post('/transaction', auth, addTransaction)

@@ -45,7 +45,13 @@ exports.getProduct = async (req, res) => {
 exports.addProduct = async (req, res) => {
   try {
     const { category: categoryName, ...data } = req.body;
-    const newProduct = await product.create(data);
+
+    const newProduct = await product.create({
+      ...data,
+      image: req.file.filename, // image that passed from middleware will in the req.file 
+      idUser: req.user.id, // got from authentication middleware
+
+    });
     const categoryData = await category.findOne({
       where: {
         name: categoryName,
@@ -64,7 +70,7 @@ exports.addProduct = async (req, res) => {
         idProduct: newProduct.id,
       });
     }
-    const productData = await product.findOne({
+    let productData = await product.findOne({
       where: {
         id: newProduct.id,
       },
@@ -93,9 +99,14 @@ exports.addProduct = async (req, res) => {
         exclude: ["createdAt", "updatedAt", "idUser"],
       },
     });
+    productData = JSON.parse(JSON.stringify(productData))
+
     res.send({
       status: "success...",
-      data: productData,
+      data: {
+        ...productData,
+        image: 'http://localhost:5000/uploads/' + productData.image
+      },
     });
   } catch (error) {
     console.log(error);

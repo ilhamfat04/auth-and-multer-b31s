@@ -1,24 +1,24 @@
-# Authentication with JWT
+# Handling Upload File with Multer
 
-According to official documentation, JSON Web Token (JWT) is an open standard (RFC 7519) that defines a compact and self-contained way for securely transmitting information between parties as a JSON object.  
-
-This information can be verified and trusted because it is digitally signed. JWTs can be signed using a secret (with the HMAC algorithm) or a public/private key pair using RSA or ECDSA.
+In applications that mostly used like whatsapp and instagram, you can attach image or other file type right? But how server can handle request like this? The answer is we need middleware to handle file upload.  
+In node js, we can use package called multer.  Multer is a node.js middleware for handling multipart/form-data, which is primarily used for uploading files.
 
 For a simple example:
 ```javascript
-const jwt = require("jsonwebtoken")
+const multer = require("multer")
 // generate token when register or login
-const token = jwt.sign(payload, "YOUR-SECRET-KEY");
-
-// in the auth middleware
-try {
-    const verified = jwt.verify(token, "YOUR-SECRET-KEY"); //verified token
-    req.user = verified;
-    next(); // if token valid go to the next request
-  } catch (error) {
-    // if token not valid send response invalid token
-    res.status(400).send({ message: "Invalid token" });
-}
+const storage = multer.diskStorage({
+  destination: function (req, file, cb) {
+    cb(null, 'uploads')
+  },
+  filename: function (req, file, cb) {
+    cb(null, file.originalname + '-' + Date.now())
+  }
+})
+ 
+const upload = multer({ storage: storage })
 ```
 
-Reference: [Json Web Token Implementation](https://www.digitalocean.com/community/tutorials/nodejs-jwt-expressjs)
+After create middleware, don't forget to create destination folder in your project
+
+Reference: [Handling upload with multer](https://www.npmjs.com/package/multer)
