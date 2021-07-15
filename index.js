@@ -13,6 +13,6 @@ app.use(express.json())
 
 // Add endpoint grouping and router
 app.use('/api/v1/', router)
-app.use('/uploads', express.static('uploads'))
+// add route here to serving static file
 
 app.listen(port, () => console.log(`Listening on port ${port}!`))
