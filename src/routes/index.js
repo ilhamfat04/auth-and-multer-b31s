@@ -10,6 +10,7 @@ const { register, login } = require('../controllers/auth')
 
 // Middleware
 // import middleware here
+const { auth } = require('../middlewares/auth')
 
 // Route
 router.post('/user', addUsers)
@@ -18,7 +19,7 @@ router.get('/user/:id', getUser)
 router.patch('/user/:id', updateUser)
 router.delete('/user/:id', deleteUser)
 
-router.get('/products', getProduct)
+router.get('/products', auth, getProduct)
 router.post('/product', addProduct) // place middleware before controller
 
 router.get('/transactions', getTransactions)
