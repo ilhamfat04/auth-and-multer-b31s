@@ -33,11 +33,26 @@ exports.register = async (req, res) => {
     const salt = await bcrypt.genSalt(10)
     const hashedPassword = await bcrypt.hash(req.body.password, salt)
 
+    const userExist = await user.findOne({
+      where: {
+        email: req.body.email,
+      },
+      attributes: {
+        exclude: ["createdAt", "updatedAt"],
+      },
+    });
+
+    if (userExist) {
+      return res.status(400).send({
+        status: 'failed',
+        message: 'email has already taken'
+      });
+    }
+
     const newUser = await user.create({
       name: req.body.name,
       email: req.body.email,
-      password: hashedPassword,
-      status: "seller"
+      password: hashedPassword
     });
 
     res.status(200).send({
